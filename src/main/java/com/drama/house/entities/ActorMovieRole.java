@@ -12,7 +12,7 @@ import lombok.Setter;
 @Setter
 @Getter
 @Entity
-public class Role {
+public class ActorMovieRole {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

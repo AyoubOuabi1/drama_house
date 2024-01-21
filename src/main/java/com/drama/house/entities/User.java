@@ -5,6 +5,15 @@ import jakarta.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+@NoArgsConstructor
+@AllArgsConstructor
+@Setter
+@Getter
 @Entity
 public class User {
     @Id
@@ -22,6 +31,5 @@ public class User {
     @OneToMany(mappedBy = "user")
     private Set<Review> reviews = new HashSet<>();
 
-    // Constructors, getters, and setters
-}
+ }
 
