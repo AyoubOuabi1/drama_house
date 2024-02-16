@@ -5,7 +5,7 @@ import jakarta.persistence.*;
 import java.util.Date;
 
 @Entity
-public class Episode {
+public class Season {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -13,14 +13,8 @@ public class Episode {
     @ManyToOne
     private Series series;
 
-    private int seasonNumber;
-    private int episodeNumber;
-    private String title;
-    private String description;
-    private String videoUrl;
-    private int duration;
+    private int number;
     private Date releaseDate;
-    private float rating;
-    private int numRatings;
 
+    // Constructors, getters, and setters
 }

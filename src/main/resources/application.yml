@@ -8,16 +8,16 @@ server:
 # Spring Configuration
 spring:
 
-  #to enable colors when you run your app outside intellij
   output:
     ansi:
       enabled: always
 
   # Database Configuration
   datasource:
-    url: jdbc:mysql://localhost:3306/taskflow?createDatabaseIfNotExist=true
-    username: root
+    url: jdbc:postgresql://localhost:5432/drama_house
+    username: postgres
     password: root
+    driver-class-name: org.postgresql.Driver
   jpa:
     show-sql: true
     hibernate:
@@ -25,6 +25,4 @@ spring:
     properties:
       hibernate:
         globally_quoted_identifiers: true
-  liquibase:
-    enabled: false
-    change-log: db/master.xml
+    database-platform: org.hibernate.dialect.PostgreSQLDialect

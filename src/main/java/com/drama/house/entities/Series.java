@@ -6,16 +6,18 @@ import java.util.Date;
 import java.util.List;
 
 @Entity
-public class Movie {
+public class Series {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String title;
     private String description;
     private Date releaseDate;
-    private int duration;
+    private int numberOfSeasons;
     private String format;
-    private String videoUrl;
+    private float rating;
+    private int numRatings;
+    private boolean isAvailable;
 
     @ManyToMany
     private List<Genre> genres;
@@ -26,4 +28,8 @@ public class Movie {
     @ManyToOne
     private Person director;
 
+    @OneToMany(mappedBy = "series")
+    private List<Season> seasons;
+
+    // Constructors, getters, and setters
 }
