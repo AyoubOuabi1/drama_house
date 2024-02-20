@@ -24,6 +24,7 @@ public class Season {
 
     private int number;
     private Date releaseDate;
-
+    private String posterUrl;
+    private String coverUrl;
     // Constructors, getters, and setters
 }

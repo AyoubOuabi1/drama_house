@@ -33,6 +33,13 @@ public class GenreServiceImpl implements GenreService {
         return convertToDTO(genre);
     }
 
+    @Override
+    public GenreDTO getGenreById(Long id) {
+        return genreRepository.findById(id)
+                .map(this::convertToDTO)
+                .orElse(null);
+    }
+
     private GenreDTO convertToDTO(Genre genre) {
         return modelMapper.map(genre, GenreDTO.class);
     }

@@ -1,13 +1,16 @@
 package com.drama.house.controllers;
 
 import com.drama.house.dtos.MovieDTO;
+import com.drama.house.dtos.requests.RequestMovieDTO;
 import com.drama.house.services.MovieService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import java.text.ParseException;
 import java.util.List;
 
 @RestController
-@RequestMapping("/movies")
+@RequestMapping("/api/v1/movies")
 public class MovieController {
     @Autowired
     private MovieService movieService;
@@ -23,8 +26,8 @@ public class MovieController {
     }
 
     @PostMapping
-    public MovieDTO addMovie(@RequestBody MovieDTO movieDTO) {
-        return movieService.saveMovie(movieDTO);
+    public MovieDTO addMovie(@ModelAttribute RequestMovieDTO requestMovieDTO) throws ParseException {
+        return movieService.saveMovie(requestMovieDTO);
     }
 
     @DeleteMapping("/{id}")

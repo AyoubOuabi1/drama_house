@@ -26,6 +26,7 @@ public class Episode {
     private String title;
     private String description;
     private String videoUrl;
+    private String posterUrl;
     private int duration;
     private Date releaseDate;
     private float rating;

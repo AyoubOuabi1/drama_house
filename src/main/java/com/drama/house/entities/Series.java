@@ -27,7 +27,8 @@ public class Series {
     private float rating;
     private int numRatings;
     private boolean isAvailable;
-
+    private String posterUrl;
+    private String coverUrl;
     @ManyToMany
     private List<Genre> genres;
 
@@ -39,6 +40,4 @@ public class Series {
 
     @OneToMany(mappedBy = "series")
     private List<Season> seasons;
-
-    // Constructors, getters, and setters
 }

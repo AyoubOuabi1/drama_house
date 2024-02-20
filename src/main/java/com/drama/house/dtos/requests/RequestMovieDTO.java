@@ -1,4 +1,4 @@
-package com.drama.house.dtos;
+package com.drama.house.dtos.requests;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -7,23 +7,22 @@ import lombok.Setter;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Date;
+import java.util.List;
 
 @NoArgsConstructor
 @AllArgsConstructor
 @Setter
 @Getter
-public class EpisodeDTO {
-    private Long id;
-    private Long seriesId;
-    private int seasonNumber;
-    private int episodeNumber;
+public class RequestMovieDTO {
     private String title;
     private String description;
+    private String releaseDate;
+    private int duration;
+    private String trailerUrl;
     private MultipartFile videoFile;
     private MultipartFile posterFile;
-    private int duration;
-    private Date releaseDate;
-    private float rating;
-    private int numRatings;
-
+    private MultipartFile coverFile;
+    private List<Long> genres;
+    private List<Long> cast;
+    private Long directorId;
 }

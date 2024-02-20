@@ -23,7 +23,6 @@ public class User {
     private String email;
     private String firstName;
     private String lastName;
-    // Other fields
 
     @ManyToMany
     private List<Movie> favoriteMovies;
@@ -31,5 +30,4 @@ public class User {
     @OneToMany(mappedBy = "user")
     private List<Review> reviews;
 
-    // Other mappings and getters/setters
 }

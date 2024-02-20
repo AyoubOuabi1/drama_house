@@ -20,10 +20,12 @@ public class Movie {
     private Long id;
     private String title;
     private String description;
-    private Date releaseDate;
+    private String releaseDate;
     private int duration;
-    private String format;
+    private String trailerUrl;
     private String videoUrl;
+    private String posterUrl;
+    private String coverUrl;
 
     @ManyToMany
     private List<Genre> genres;
