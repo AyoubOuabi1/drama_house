@@ -1,13 +1,14 @@
 package com.drama.house.controllers;
 
 import com.drama.house.dtos.SeasonDTO;
+import com.drama.house.dtos.requests.RequestSeasonDTO;
 import com.drama.house.services.SeasonService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/seasons")
+@RequestMapping("/api/v1/seasons")
 public class SeasonController {
     @Autowired
     private SeasonService seasonService;
@@ -18,7 +19,7 @@ public class SeasonController {
     }
 
     @PostMapping
-    public SeasonDTO addSeason(@RequestBody SeasonDTO seasonDTO) {
+    public SeasonDTO addSeason(@ModelAttribute RequestSeasonDTO seasonDTO) {
         return seasonService.saveSeason(seasonDTO);
     }
 }

@@ -57,7 +57,7 @@ public class PersonServiceImpl implements PersonService {
 
     private Person convertToEntity(RequestPersonDTO requestPersonDTO) throws ParseException {
         Person person = PersonMapper.toPerson(requestPersonDTO);
-        person.setImageUrl(s3Service.uploadFile(requestPersonDTO.getImageFile()));
+        person.setImageUrl(s3Service.uploadFile("persons_images",requestPersonDTO.getImageFile()));
         return person;
     }
 }

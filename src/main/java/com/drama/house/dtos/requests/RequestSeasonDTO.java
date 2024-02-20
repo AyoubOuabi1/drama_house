@@ -1,6 +1,5 @@
-package com.drama.house.dtos;
+package com.drama.house.dtos.requests;
 
-import com.drama.house.entities.Series;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -13,14 +12,13 @@ import java.util.Date;
 @AllArgsConstructor
 @Setter
 @Getter
-public class SeasonDTO {
-    private Long id;
+public class RequestSeasonDTO {
     private String title;
-    private String seriesName;
+    private Long seriesId;
     private int numberOfEpisodes;
     private String releaseDate;
-    private String coverUrl;
-    private String posterUrl;
+    private MultipartFile coverFile;
+    private MultipartFile posterFile;
 
 
 }

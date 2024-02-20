@@ -17,14 +17,11 @@ public class SeriesDTO {
     private Long id;
     private String title;
     private String description;
-    private Date releaseDate;
+    private String releaseDate;
     private int numberOfSeasons;
-    private String format;
-    private float rating;
-    private int numRatings;
-    private boolean isAvailable;
-    private MultipartFile coverImage;
-    private MultipartFile posterImage;
+    private String trailerUrl;
+    private String posterUrl;
+    private String coverUrl;
     private List<GenreDTO> genres;
     private List<PersonDTO> cast;
     private PersonDTO director;

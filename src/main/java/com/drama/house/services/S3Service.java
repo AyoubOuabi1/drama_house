@@ -5,5 +5,5 @@ import org.springframework.web.multipart.MultipartFile;
 
 @Service
 public interface S3Service {
-    String uploadFile(MultipartFile file);
+    String uploadFile(String folderName, MultipartFile file);
 }

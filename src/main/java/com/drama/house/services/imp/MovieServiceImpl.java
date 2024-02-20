@@ -59,7 +59,9 @@ public class MovieServiceImpl implements MovieService {
     public MovieDTO saveMovie(RequestMovieDTO requestMovieDTO) throws ParseException {
         Movie movie = convertToEntity(requestMovieDTO);
         movie = movieRepository.save(movie);
-        return convertToDTO(movie);
+        MovieDTO movieDTO = convertToDTO(movie);
+        movieDTO.setDirector(modelMapper.map(personService.getPersonById(requestMovieDTO.getDirectorId()), Person.class));
+        return movieDTO;
     }
 
     @Override
@@ -69,14 +71,16 @@ public class MovieServiceImpl implements MovieService {
 
     private MovieDTO convertToDTO(Movie movie) {
 
-        return modelMapper.map(movie, MovieDTO.class);
+        MovieDTO movieDTO = modelMapper.map(movie, MovieDTO.class);
+        movieDTO.setDirector(movie.getDirector());
+        return movieDTO;
     }
 
     private Movie convertToEntity(RequestMovieDTO requestMovieDTO) throws ParseException {
         Movie movie = MovieMapper.toMovie(requestMovieDTO);
-        movie.setPosterUrl(s3Service.uploadFile(requestMovieDTO.getPosterFile()));
-        movie.setCoverUrl(s3Service.uploadFile(requestMovieDTO.getCoverFile()));
-        movie.setVideoUrl(s3Service.uploadFile(requestMovieDTO.getVideoFile()));
+        movie.setPosterUrl(s3Service.uploadFile("movies_images",requestMovieDTO.getPosterFile()));
+        movie.setCoverUrl(s3Service.uploadFile("movies_images",requestMovieDTO.getCoverFile()));
+        movie.setVideoUrl(s3Service.uploadFile("movies_videos",requestMovieDTO.getVideoFile()));
         List<Genre> genres = new ArrayList<>();
         requestMovieDTO.getGenres().forEach(genreId -> {
             Genre genre = modelMapper.map(genreService.getGenreById(genreId),Genre.class);

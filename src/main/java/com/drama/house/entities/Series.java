@@ -6,7 +6,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.Date;
 import java.util.List;
 
 
@@ -21,12 +20,10 @@ public class Series {
     private Long id;
     private String title;
     private String description;
-    private Date releaseDate;
+    private String releaseDate;
+    private String language;
     private int numberOfSeasons;
-    private String format;
-    private float rating;
-    private int numRatings;
-    private boolean isAvailable;
+    private String trailerUrl;
     private String posterUrl;
     private String coverUrl;
     @ManyToMany

@@ -1,13 +1,14 @@
 package com.drama.house.controllers;
 
 import com.drama.house.dtos.SeriesDTO;
+import com.drama.house.dtos.requests.RequestSeriesDTO;
 import com.drama.house.services.SeriesService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/series")
+@RequestMapping("api/v1/series")
 public class SeriesController {
     @Autowired
     private SeriesService seriesService;
@@ -18,7 +19,7 @@ public class SeriesController {
     }
 
     @PostMapping
-    public SeriesDTO addSeries(@RequestBody SeriesDTO seriesDTO) {
+    public SeriesDTO addSeries(@ModelAttribute RequestSeriesDTO seriesDTO) {
         return seriesService.saveSeries(seriesDTO);
     }
 }

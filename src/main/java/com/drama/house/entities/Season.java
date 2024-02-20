@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.util.Date;
+import java.util.List;
 
 
 @NoArgsConstructor
@@ -18,13 +19,16 @@ public class Season {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    private String title;
 
+    private int numberOfEpisodes;
+    private String releaseDate;
+    private String posterUrl;
+    private String coverUrl;
     @ManyToOne
     private Series series;
 
-    private int number;
-    private Date releaseDate;
-    private String posterUrl;
-    private String coverUrl;
-    // Constructors, getters, and setters
+    @OneToMany(mappedBy = "season")
+    private List<Episode> episodes;
+
 }

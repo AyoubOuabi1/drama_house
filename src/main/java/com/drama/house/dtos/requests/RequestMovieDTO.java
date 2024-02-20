@@ -17,6 +17,7 @@ public class RequestMovieDTO {
     private String title;
     private String description;
     private String releaseDate;
+    private String language;
     private int duration;
     private String trailerUrl;
     private MultipartFile videoFile;

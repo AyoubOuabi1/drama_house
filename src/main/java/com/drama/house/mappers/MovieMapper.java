@@ -11,6 +11,7 @@ public class MovieMapper {
         movie.setTitle(requestMovieDTO.getTitle());
         movie.setDescription(requestMovieDTO.getDescription());
         movie.setReleaseDate(requestMovieDTO.getReleaseDate());
+        movie.setLanguage(requestMovieDTO.getLanguage());
         movie.setDuration(requestMovieDTO.getDuration());
         movie.setTrailerUrl(requestMovieDTO.getTrailerUrl());
         return movie;

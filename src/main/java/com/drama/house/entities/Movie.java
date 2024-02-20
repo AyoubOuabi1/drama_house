@@ -21,6 +21,7 @@ public class Movie {
     private String title;
     private String description;
     private String releaseDate;
+    private String language;
     private int duration;
     private String trailerUrl;
     private String videoUrl;

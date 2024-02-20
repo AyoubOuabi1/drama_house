@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.util.Date;
+import java.util.List;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -18,18 +19,15 @@ public class Episode {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
-    private Series series;
-
-    private int seasonNumber;
     private int episodeNumber;
     private String title;
     private String description;
     private String videoUrl;
     private String posterUrl;
     private int duration;
-    private Date releaseDate;
-    private float rating;
-    private int numRatings;
+    private String releaseDate;
+
+    @ManyToOne
+    private Season season;
 
 }

@@ -14,16 +14,15 @@ import java.util.Date;
 @Getter
 public class EpisodeDTO {
     private Long id;
-    private Long seriesId;
-    private int seasonNumber;
+    private String series;
+    private String season;
     private int episodeNumber;
     private String title;
     private String description;
-    private MultipartFile videoFile;
-    private MultipartFile posterFile;
+    private String videoUrl;
+    private String posterUrl;
     private int duration;
-    private Date releaseDate;
-    private float rating;
-    private int numRatings;
+    private String releaseDate;
+
 
 }
