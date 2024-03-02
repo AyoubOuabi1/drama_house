@@ -19,16 +19,16 @@ public class S3ServiceImp implements S3Service {
 
     private final AmazonS3 amazonS3;
    //  @Value("${aws.access.awsAccessKey}")
-    private String awsAccessKey = "AKIA6OLOSENVPS4SABVV";
+    private String awsAccessKey = " ";
 
    // @Value("${aws.access.awsSecretKey}")
-    private String awsSecretKey = "6hjP2dxLduTSfNOzlbz8pCPW1Okm2w2Op7tQH+ok";
+    private String awsSecretKey = "";
 
    // @Value("${aws.access.awsRegion}")
-    private String awsRegion = "eu-west-3";
+    private String awsRegion = "";
 
    // @Value("${aws.access.awsBucketName}")
-    private String bucketName ="dramahousee";
+    private String bucketName =" ";
 
     public S3ServiceImp() {
 

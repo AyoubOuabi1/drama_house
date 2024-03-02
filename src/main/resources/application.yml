@@ -7,7 +7,6 @@ server:
 
 # Spring Configuration
 spring:
-
   output:
     ansi:
       enabled: always
@@ -33,3 +32,5 @@ spring:
     multipart:
       max-file-size: 34343MB
       max-request-size: 34343MB
+  main:
+    allow-circular-references: true
