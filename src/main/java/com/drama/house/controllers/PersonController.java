@@ -10,7 +10,7 @@ import java.text.ParseException;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/v1/persons")
+@RequestMapping("/api/v1/user/persons")
 public class PersonController {
     @Autowired
     private PersonService personService;

@@ -34,5 +34,15 @@ public class MovieController {
     public void deleteMovie(@PathVariable Long id) {
         movieService.deleteMovie(id);
     }
+
+    @GetMapping("/search/{name}")
+    public List<MovieDTO> findByName(@PathVariable String name) {
+        return movieService.findByName(name);
+    }
+
+    @GetMapping("/search/genre/{name}")
+    public List<MovieDTO> findByGenre(@PathVariable String name) {
+        return movieService.findByGenre(name);
+    }
 }
 

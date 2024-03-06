@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("api/v1/series")
+@RequestMapping("api/v1/user/series")
 public class SeriesController {
     @Autowired
     private SeriesService seriesService;

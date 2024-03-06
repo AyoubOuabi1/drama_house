@@ -69,6 +69,21 @@ public class MovieServiceImpl implements MovieService {
         movieRepository.deleteById(id);
     }
 
+    @Override
+    public List<MovieDTO> findByName(String name) {
+
+        return movieRepository.findMovieByName(name).stream()
+                .map(this::convertToDTO)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<MovieDTO> findByGenre(String name) {
+        return movieRepository.findMovieByGenre(name).stream()
+                .map(this::convertToDTO)
+                .collect(Collectors.toList());
+    }
+
     private MovieDTO convertToDTO(Movie movie) {
 
         MovieDTO movieDTO = modelMapper.map(movie, MovieDTO.class);
