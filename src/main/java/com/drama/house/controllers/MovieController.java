@@ -4,8 +4,6 @@ import com.drama.house.dtos.MovieDTO;
 import com.drama.house.dtos.requests.RequestMovieDTO;
 import com.drama.house.services.MovieService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 
 import java.text.ParseException;
@@ -18,8 +16,8 @@ public class MovieController {
     private MovieService movieService;
 
     @GetMapping
-    public Page<MovieDTO> getAllMovies(Pageable pageable) {
-        return movieService.findAllMovies(pageable);
+    public List<MovieDTO> getAllMovies() {
+        return movieService.getAllMovies();
     }
 
     @GetMapping("/{id}")
@@ -37,18 +35,19 @@ public class MovieController {
         movieService.deleteMovie(id);
     }
 
-    @GetMapping("/search/{name}")
-    public Page<MovieDTO> findByName(@PathVariable String name, Pageable pageable) {
-        return movieService.findMovieByName(name, pageable);
+    @GetMapping("/search")
+    public List<MovieDTO> findByName(@RequestParam String name) {
+        return movieService.findByName(name);
     }
 
-    @GetMapping("/search/genre/{name}")
-    public Page<MovieDTO> findByGenre(@PathVariable String name, Pageable pageable) {
-        return movieService.findMovieByGenre(name, pageable);
+    @GetMapping("/search/genre")
+    public List<MovieDTO> findByGenre(@RequestParam String name) {
+        return movieService.findByGenre(name);
     }
 
     @GetMapping("/last-ten")
     public List<MovieDTO> getFirstTenMovies() {
-        return movieService.findLastTenMoviesAdded();
+        return movieService.getFirstTenMovies();
     }
 }
+

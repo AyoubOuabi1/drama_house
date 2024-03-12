@@ -14,14 +14,11 @@ import java.util.List;
 public interface MovieRepository extends JpaRepository<Movie, Long> {
     // Custom query methods if needed
 
-    @Query("SELECT m FROM Movie m")
-    Page<Movie> findAllMovies(Pageable pageable);
-
     @Query("SELECT m FROM Movie m WHERE m.title LIKE %:name%")
-    Page<Movie> findMovieByName(String name,Pageable pageable);
+    List<Movie> findMovieByName(String name);
 
     @Query("SELECT m FROM Movie m JOIN m.genres g WHERE g.name = :name")
-    Page<Movie> findMovieByGenre(String name,Pageable pageable);
+    List<Movie> findMovieByGenre(String name);
 
     @Query("SELECT m FROM Movie m ORDER BY m.id DESC")
     Page<Movie> findLastTenMoviesAdded(Pageable pageable);
