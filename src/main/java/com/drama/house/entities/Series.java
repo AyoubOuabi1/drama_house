@@ -19,6 +19,8 @@ public class Series {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String title;
+
+    @Column(columnDefinition = "text")
     private String description;
     private String releaseDate;
     private String language;

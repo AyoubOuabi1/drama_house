@@ -12,6 +12,9 @@ import com.drama.house.services.MovieService;
 import com.drama.house.services.PersonService;
 import com.drama.house.services.S3Service;
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.text.ParseException;
@@ -23,13 +26,9 @@ import java.util.stream.Collectors;
 public class MovieServiceImpl implements MovieService {
 
     private final MovieRepository movieRepository;
-
     private final ModelMapper modelMapper;
-
-    private final   S3Service s3Service;
-
+    private final S3Service s3Service;
     private final GenreService genreService;
-
     private final PersonService personService;
 
     public MovieServiceImpl(S3Service s3Service, MovieRepository movieRepository,
@@ -40,13 +39,6 @@ public class MovieServiceImpl implements MovieService {
         this.modelMapper = modelMapper;
         this.genreService = genreService;
         this.personService = personService;
-    }
-    @Override
-    public List<MovieDTO> getAllMovies() {
-        List<Movie> movies = movieRepository.findAll();
-        return movies.stream()
-                .map(this::convertToDTO)
-                .collect(Collectors.toList());
     }
 
     @Override
@@ -70,22 +62,30 @@ public class MovieServiceImpl implements MovieService {
     }
 
     @Override
-    public List<MovieDTO> findByName(String name) {
-
-        return movieRepository.findMovieByName(name).stream()
-                .map(this::convertToDTO)
-                .collect(Collectors.toList());
+    public Page<MovieDTO> findAllMovies(Pageable pageable) {
+        return movieRepository.findAllMovies(pageable).map(this::convertToDTO);
     }
 
     @Override
-    public List<MovieDTO> findByGenre(String name) {
-        return movieRepository.findMovieByGenre(name).stream()
+    public Page<MovieDTO> findMovieByName(String name, Pageable pageable) {
+        return movieRepository.findMovieByName(name, pageable).map(this::convertToDTO);
+    }
+
+    @Override
+    public Page<MovieDTO> findMovieByGenre(String name, Pageable pageable) {
+        return movieRepository.findMovieByGenre(name, pageable).map(this::convertToDTO);
+    }
+
+    @Override
+    public List<MovieDTO> findLastTenMoviesAdded() {
+        Pageable topTen = PageRequest.of(0, 12);
+        Page<Movie> movies = movieRepository.findLastTenMoviesAdded(topTen);
+        return movies.stream()
                 .map(this::convertToDTO)
                 .collect(Collectors.toList());
     }
 
     private MovieDTO convertToDTO(Movie movie) {
-
         MovieDTO movieDTO = modelMapper.map(movie, MovieDTO.class);
         movieDTO.setDirector(movie.getDirector());
         return movieDTO;
@@ -93,12 +93,12 @@ public class MovieServiceImpl implements MovieService {
 
     private Movie convertToEntity(RequestMovieDTO requestMovieDTO) throws ParseException {
         Movie movie = MovieMapper.toMovie(requestMovieDTO);
-        movie.setPosterUrl(s3Service.uploadFile("movies_images",requestMovieDTO.getPosterFile()));
-        movie.setCoverUrl(s3Service.uploadFile("movies_images",requestMovieDTO.getCoverFile()));
-        movie.setVideoUrl(s3Service.uploadFile("movies_videos",requestMovieDTO.getVideoFile()));
+        movie.setPosterUrl(s3Service.uploadFile("movies_images", requestMovieDTO.getPosterFile()));
+        movie.setCoverUrl(s3Service.uploadFile("movies_images", requestMovieDTO.getCoverFile()));
+        movie.setVideoUrl(s3Service.uploadFile("movies_videos", requestMovieDTO.getVideoFile()));
         List<Genre> genres = new ArrayList<>();
         requestMovieDTO.getGenres().forEach(genreId -> {
-            Genre genre = modelMapper.map(genreService.getGenreById(genreId),Genre.class);
+            Genre genre = modelMapper.map(genreService.getGenreById(genreId), Genre.class);
             genres.add(genre);
         });
         movie.setGenres(genres);
@@ -112,7 +112,4 @@ public class MovieServiceImpl implements MovieService {
         movie.setCast(cast);
         return movie;
     }
-
-
 }
-

@@ -10,9 +10,14 @@ import lombok.Setter;
 @AllArgsConstructor
 @Setter
 @Getter
+
 public class GenreDTO {
     @Nullable
     private Long id;
 
     private String name;
+
+    public GenreDTO(String name) {
+        this.name = name;
+    }
 }

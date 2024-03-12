@@ -21,7 +21,7 @@ public class Person {
     private String name;
     private String imageUrl;
     private String nationality;
-    @Column(columnDefinition = "TEXT")
+    @Column(columnDefinition = "text")
     private String biography;
     private Date birthDate;
 

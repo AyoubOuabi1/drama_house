@@ -21,6 +21,7 @@ public class Episode {
 
     private int episodeNumber;
     private String title;
+    @Column(columnDefinition = "text")
     private String description;
     private String videoUrl;
     private String posterUrl;
