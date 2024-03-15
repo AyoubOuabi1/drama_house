@@ -19,5 +19,7 @@ public interface UserService {
 
     ResponseDto authenticate(AuthenticateDto authenticateDto);
     ResponseDto register(RegisterDto registerDto) throws ValidationException;
+
+    User getCurrentUser();
 }
 

@@ -1,11 +1,9 @@
 package com.drama.house.entities;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @NoArgsConstructor
@@ -13,19 +11,25 @@ import java.util.List;
 @Setter
 @Getter
 @Entity
+@Builder
 public class Watchlist {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @OneToOne
+    @JoinColumn(name = "user_id")
     private User user;
 
+
     @ManyToMany
-    private List<Movie> movies;
+    private List<Movie> movies = new ArrayList<>();
 
     @ManyToMany
     private List<Series> series;
 
-    // Constructors, getters, and setters
+
+
+
+
 }

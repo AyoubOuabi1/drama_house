@@ -1,5 +1,8 @@
 package com.drama.house.dtos;
 
+import com.drama.house.entities.Movie;
+import com.drama.house.entities.Series;
+import jakarta.annotation.Nullable;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -12,8 +15,7 @@ import java.util.List;
 @Setter
 @Getter
 public class WatchlistDTO {
+
     private Long id;
-    private Long userId;
-    private List<Long> movieIds;
-    private List<Long> seriesIds;
+    private List<Movie> movies;
 }

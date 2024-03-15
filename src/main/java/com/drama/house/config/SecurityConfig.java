@@ -33,7 +33,9 @@ public class SecurityConfig {
                                 .permitAll()
                                 .requestMatchers(HttpMethod.GET, "/api/v1/user/persons/**")
                                 .permitAll()
-                                .requestMatchers(HttpMethod.POST,"/api/V1/user/**").permitAll()
+                                .requestMatchers(HttpMethod.POST,"/api/V1/user/**")
+                                .permitAll()
+                                .requestMatchers("/api/v1/watch-list/**").hasAnyRole("USER","ADMIN")
                                 .anyRequest()
                                 .authenticated()
                 )
@@ -45,4 +47,5 @@ public class SecurityConfig {
 
         return http.build();
     }
+
 }
