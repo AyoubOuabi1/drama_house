@@ -50,6 +50,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public List<UserDTO> getAllUsers() {
         List<User> users = userRepository.findAll();
+        users.remove(getCurrentUser());
         return users.stream()
                 .map(this::convertToDTO)
                 .collect(Collectors.toList());
@@ -90,6 +91,7 @@ public class UserServiceImpl implements UserService {
                 .email(registerDto.getEmail())
                 .roles(Collections.singleton(userRole))
                 .password(passwordEncoder.encode(registerDto.getPassword()))
+                .profilePicture("https://dramahousee.s3.eu-west-3.amazonaws.com/user-avatar.png")
                 .build();
         ResponseDto responseDto = mapUserToResponseDTO(this.userRepository.save(user));
         responseDto.setAccessToken(jwtService.generateToken(user));
@@ -124,8 +126,7 @@ public class UserServiceImpl implements UserService {
                 user.getEmail(),
                 null,
                 user.getRoles().stream().findFirst().map(RoleEntity::getName).orElse(null),
-                permissionNames
-        );
+                user.getProfilePicture())   ;
     }
     public User getCurrentUser() {
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -136,5 +137,23 @@ public class UserServiceImpl implements UserService {
         }
 
         return null;
+    }
+
+    @Override
+    public UserDTO updateUser(UserDTO updatedUser) {
+        String currentUsername = SecurityContextHolder.getContext().getAuthentication().getName();
+        User currentUser = userRepository.findByEmail(currentUsername).get();
+
+        if (currentUser != null) {
+            if (updatedUser.getEmail() != null && !userRepository.findByEmail(updatedUser.getEmail()).equals(currentUser)) {
+                throw new IllegalArgumentException("Email is already in use");
+            }
+            currentUser.setUsername(updatedUser.getUsername() != null ? updatedUser.getUsername() : currentUser.getUsername());
+            currentUser.setEmail(updatedUser.getEmail() != null ? updatedUser.getEmail() : currentUser.getEmail());
+            currentUser.setPassword(updatedUser.getPassword() != null ? passwordEncoder.encode(updatedUser.getPassword()) : currentUser.getPassword());
+            currentUser.setId(currentUser.getId());
+            userRepository.save(currentUser);
+        }
+        return convertToDTO(currentUser);
     }
 }

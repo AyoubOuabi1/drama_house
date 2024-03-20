@@ -1,5 +1,6 @@
 package com.drama.house.dtos;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -10,12 +11,13 @@ import lombok.Setter;
 @Setter
 @Getter
 public class UserDTO {
-    private Long id;
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     private String username;
     private String email;
-    private String firstName;
-    private String lastName;
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     private String profilePicture;
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    private String password;
 
 }
 

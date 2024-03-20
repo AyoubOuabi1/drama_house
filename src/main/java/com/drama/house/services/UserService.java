@@ -21,5 +21,7 @@ public interface UserService {
     ResponseDto register(RegisterDto registerDto) throws ValidationException;
 
     User getCurrentUser();
+
+    UserDTO updateUser(UserDTO updatedUser);
 }
 

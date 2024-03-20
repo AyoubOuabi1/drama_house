@@ -16,5 +16,5 @@ public class ResponseDto {
     private String email;
     private String accessToken;
     private String role;
-    private Set<String> permissions;
+    private String profilePicture;
 }

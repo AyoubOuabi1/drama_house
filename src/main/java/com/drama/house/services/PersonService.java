@@ -10,4 +10,8 @@ public interface PersonService {
     List<PersonDTO> getAllPersons();
     PersonDTO savePerson(RequestPersonDTO personDTO) throws ParseException;
     PersonDTO getPersonById(Long id);
+
+    List<PersonDTO> findByName(String name);
+
+     void deletePerson(Long id);
 }

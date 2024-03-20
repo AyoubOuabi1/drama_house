@@ -2,14 +2,18 @@ package com.drama.house.services.imp;
 
 import com.drama.house.dtos.PersonDTO;
 import com.drama.house.dtos.requests.RequestPersonDTO;
+import com.drama.house.entities.Movie;
 import com.drama.house.entities.Person;
 import com.drama.house.mappers.PersonMapper;
+import com.drama.house.repositories.MovieRepository;
 import com.drama.house.repositories.PersonRepository;
+import com.drama.house.services.MovieService;
 import com.drama.house.services.PersonService;
 import com.drama.house.services.S3Service;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.text.ParseException;
 import java.util.List;
@@ -23,10 +27,20 @@ public class PersonServiceImpl implements PersonService {
 
     private final S3Service s3Service;
 
-    public PersonServiceImpl(PersonRepository personRepository, ModelMapper modelMapper, S3Service s3Service) {
+/*
+    private final MovieRepository movieService;
+*/
+
+    public PersonServiceImpl(PersonRepository personRepository,
+                             ModelMapper modelMapper,
+                             S3Service s3Service/*,
+                             MovieRepository movieService*/) {
         this.personRepository = personRepository;
         this.modelMapper = modelMapper;
         this.s3Service = s3Service;
+/*
+        this.movieService = movieService;
+*/
     }
 
     @Override
@@ -49,6 +63,24 @@ public class PersonServiceImpl implements PersonService {
         return personRepository.findById(id)
                 .map(this::convertToDTO)
                 .orElse(null);
+    }
+
+    @Override
+    public List<PersonDTO> findByName(String name) {
+        return personRepository.findByName(name).stream()
+                .map(this::convertToDTO)
+                .collect(Collectors.toList());
+    }
+
+    @Transactional
+    public void deletePerson(Long personId) {
+        Person person = personRepository.findById(personId).orElseThrow(() -> new RuntimeException("Person not found"));
+      /*  List<Movie> movies = movieService.findAllByCastContains(person);
+        for (Movie movie : movies) {
+            movie.getCast().remove(person);
+            movieService.save(movie);
+        }*/
+        personRepository.delete(person);
     }
 
     private PersonDTO convertToDTO(Person person) {

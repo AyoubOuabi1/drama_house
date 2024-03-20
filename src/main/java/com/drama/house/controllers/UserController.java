@@ -7,11 +7,12 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/users")
+@RequestMapping("/api/v1/users")
 public class UserController {
-    @Autowired
     private UserService userService;
-
+    public UserController(UserService userService) {
+        this.userService = userService;
+    }
     @GetMapping
     public List<UserDTO> getAllUsers() {
         return userService.getAllUsers();
@@ -30,6 +31,11 @@ public class UserController {
     @DeleteMapping("/{id}")
     public void deleteUser(@PathVariable Long id) {
         userService.deleteUser(id);
+    }
+
+    @PutMapping("/update")
+    public UserDTO updateUser(@RequestBody UserDTO userDTO) {
+        return userService.saveUser(userDTO);
     }
 }
 

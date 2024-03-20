@@ -40,6 +40,11 @@ public class GenreServiceImpl implements GenreService {
                 .orElse(null);
     }
 
+    @Override
+    public void deleteGenre(Long id) {
+        genreRepository.deleteById(id);
+    }
+
     private GenreDTO convertToDTO(Genre genre) {
         return modelMapper.map(genre, GenreDTO.class);
     }

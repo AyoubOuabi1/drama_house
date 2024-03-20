@@ -10,11 +10,12 @@ import java.text.ParseException;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/v1/user/persons")
+@RequestMapping("/api/v1/persons")
 public class PersonController {
-    @Autowired
     private PersonService personService;
-
+    public PersonController(PersonService personService) {
+        this.personService = personService;
+    }
     @GetMapping
     public List<PersonDTO> getAllPersons() {
         return personService.getAllPersons();
@@ -23,6 +24,14 @@ public class PersonController {
     @PostMapping
     public PersonDTO addPerson(@ModelAttribute RequestPersonDTO personDTO) throws ParseException {
         return personService.savePerson(personDTO);
+    }
+    @GetMapping("search")
+    public List<PersonDTO> findByName(@RequestParam String name) {
+        return personService.findByName(name);
+    }
+    @DeleteMapping("/{id}")
+    public void deletePerson(@PathVariable Long id) {
+        personService.deletePerson(id);
     }
 }
 

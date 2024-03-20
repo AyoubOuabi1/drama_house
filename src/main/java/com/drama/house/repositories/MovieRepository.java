@@ -1,6 +1,7 @@
 package com.drama.house.repositories;
 
 import com.drama.house.entities.Movie;
+import com.drama.house.entities.Person;
 import org.springframework.boot.autoconfigure.data.web.SpringDataWebProperties;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -22,5 +23,8 @@ public interface MovieRepository extends JpaRepository<Movie, Long> {
 
     @Query("SELECT m FROM Movie m ORDER BY m.id DESC")
     Page<Movie> findLastTenMoviesAdded(Pageable pageable);
+
+    List<Movie> findAllByCastContains(Person person);
+
 
 }

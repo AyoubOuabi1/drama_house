@@ -10,11 +10,12 @@ import java.text.ParseException;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/v1/user/movies")
+@RequestMapping("/api/v1/movies")
 public class MovieController {
-    @Autowired
     private MovieService movieService;
-
+    public MovieController(MovieService movieService) {
+        this.movieService = movieService;
+    }
     @GetMapping
     public List<MovieDTO> getAllMovies() {
         return movieService.getAllMovies();
@@ -27,9 +28,14 @@ public class MovieController {
 
     @PostMapping
     public MovieDTO addMovie(@ModelAttribute RequestMovieDTO requestMovieDTO) throws ParseException {
+        System.out.println("justrequest "+requestMovieDTO);
+
         return movieService.saveMovie(requestMovieDTO);
     }
-
+    @PutMapping
+    public MovieDTO updateMovie( @ModelAttribute RequestMovieDTO requestMovieDTO) throws ParseException {
+        return movieService.updateMovie(requestMovieDTO);
+    }
     @DeleteMapping("/{id}")
     public void deleteMovie(@PathVariable Long id) {
         movieService.deleteMovie(id);

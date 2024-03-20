@@ -7,11 +7,12 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/v1/user/genres")
+@RequestMapping("/api/v1/genres")
 public class GenreController {
-    @Autowired
-    private GenreService genreService;
-
+    private final GenreService genreService;
+    public GenreController(GenreService genreService) {
+        this.genreService = genreService;
+    }
     @GetMapping
     public List<GenreDTO> getAllGenres() {
         return genreService.getAllGenres();
@@ -20,6 +21,11 @@ public class GenreController {
     @PostMapping
     public GenreDTO addGenre(@RequestBody GenreDTO genreDTO) {
         return genreService.saveGenre(genreDTO);
+    }
+
+    @DeleteMapping("/{id}")
+    public void deleteGenre(@PathVariable Long id) {
+        genreService.deleteGenre(id);
     }
 }
 

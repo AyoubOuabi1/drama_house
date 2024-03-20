@@ -8,11 +8,12 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/v1/user/seasons")
+@RequestMapping("/api/v1/seasons")
 public class SeasonController {
-    @Autowired
     private SeasonService seasonService;
-
+    public SeasonController(SeasonService seasonService) {
+        this.seasonService = seasonService;
+    }
     @GetMapping
     public List<SeasonDTO> getAllSeasons() {
         return seasonService.getAllSeasons();

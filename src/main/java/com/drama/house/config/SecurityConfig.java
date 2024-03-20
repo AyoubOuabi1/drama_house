@@ -27,16 +27,31 @@ public class SecurityConfig {
                 .authorizeHttpRequests(req ->
                         req.requestMatchers("/api/v1/auth/**")
                                 .permitAll()
-                                .requestMatchers(HttpMethod.GET, "/api/v1/user/movies/**")
+                                .requestMatchers(HttpMethod.GET, "/api/v1/movies/**")
                                 .permitAll()
-                                .requestMatchers(HttpMethod.GET, "/api/v1/user/genres/**")
+                                .requestMatchers(HttpMethod.GET, "/api/v1/genres/**")
                                 .permitAll()
-                                .requestMatchers(HttpMethod.GET, "/api/v1/user/persons/**")
+                                .requestMatchers(HttpMethod.GET, "/api/v1/persons/**")
                                 .permitAll()
-                                .requestMatchers(HttpMethod.POST,"/api/V1/user/**")
-                                .permitAll()
+
+                                .requestMatchers(HttpMethod.POST,"/api/V1/movies/**").hasRole("ADMIN")
+                                .requestMatchers(HttpMethod.PUT,"/api/V1/movies/**").hasRole("ADMIN")
+                                .requestMatchers(HttpMethod.DELETE,"/api/V1/movies/**").hasRole("ADMIN")
+
+                                .requestMatchers(HttpMethod.POST,"/api/V1/genres/**").hasRole("ADMIN")
+                                .requestMatchers(HttpMethod.PUT,"/api/V1/genres/**").hasRole("ADMIN")
+                                .requestMatchers(HttpMethod.DELETE,"/api/V1/genres/**").hasRole("ADMIN")
+
+
+                                .requestMatchers(HttpMethod.POST,"/api/V1/persons/**").hasRole("ADMIN")
+                                .requestMatchers(HttpMethod.PUT,"/api/V1/persons/**").hasRole("ADMIN")
+                                .requestMatchers(HttpMethod.DELETE,"/api/V1/persons/**").hasRole("ADMIN")
+
+
                                 .requestMatchers("/api/v1/watch-list/**").hasAnyRole("USER","ADMIN")
+                                .requestMatchers("/api/v1/users/**").hasAnyRole("USER","ADMIN")
                                 .anyRequest()
+
                                 .authenticated()
                 )
                 .sessionManagement(session -> session.sessionCreationPolicy(STATELESS))

@@ -11,9 +11,10 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/v1/watch-list/")
 public class WatchlistController {
-    @Autowired
     private WatchlistService watchlistService;
-
+    public WatchlistController(WatchlistService watchlistService) {
+        this.watchlistService = watchlistService;
+    }
     @GetMapping
     public WatchlistDTO getWatchListByUser() {
         return watchlistService.getWatchlistByUserId();
