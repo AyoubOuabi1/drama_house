@@ -8,10 +8,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.Arrays;
-import java.util.Date;
+import jakarta.validation.constraints.*;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -23,37 +21,39 @@ public class RequestMovieDTO {
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private Long id;
 
+    @NotBlank(message = "Title is mandatory")
     private String title;
+
+    @NotBlank(message = "Description is mandatory")
     private String description;
+
+    @NotBlank(message = "Release date is mandatory")
     private String releaseDate;
+
+    @NotBlank(message = "Language is mandatory")
     private String language;
+
+    @Min(value = 1, message = "Duration should not be less than 1")
     private int duration;
+
+    @NotBlank(message = "Trailer URL is mandatory")
     private String trailerUrl;
-    @Nullable
-    @JsonInclude(JsonInclude.Include.NON_NULL)
+
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
     private MultipartFile videoFile;
-    @Nullable
-    @JsonInclude(JsonInclude.Include.NON_NULL)
+
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
     private MultipartFile posterFile;
-    @Nullable
-    @JsonInclude(JsonInclude.Include.NON_NULL)
+
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
     private MultipartFile coverFile;
+
+    @NotEmpty(message = "Genres list should not be empty")
     private List<Long> genres;
+
+    @NotEmpty(message = "Cast list should not be empty")
     private List<Long> cast;
+
+    @NotNull(message = "Director ID is mandatory")
     private Long directorId;
-
-
-    public void setGenres(String[] genres) {
-        this.genres = convertToLongList(genres);
-    }
-
-    public void setCast(String[] cast) {
-        this.cast = convertToLongList(cast);
-    }
-
-    private List<Long> convertToLongList(String[] array) {
-        return Arrays.stream(array)
-                .map(Long::parseLong)
-                .collect(Collectors.toList());
-    }
 }

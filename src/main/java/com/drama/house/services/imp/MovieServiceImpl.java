@@ -26,20 +26,16 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
+import com.drama.house.exception.CustomException;
 
 @Service
 public class MovieServiceImpl implements MovieService {
 
     private final MovieRepository movieRepository;
-
     private final ModelMapper modelMapper;
-
-    private final   S3Service s3Service;
-
+    private final S3Service s3Service;
     private final GenreService genreService;
-
     private final PersonService personService;
-
 
     public MovieServiceImpl(S3Service s3Service, MovieRepository movieRepository,
                             ModelMapper modelMapper, GenreService genreService,
@@ -50,93 +46,133 @@ public class MovieServiceImpl implements MovieService {
         this.genreService = genreService;
         this.personService = personService;
     }
+
     @Override
     public List<MovieDTO> getAllMovies() {
-        List<Movie> movies = movieRepository.findAll();
-        return movies.stream()
-                .map(this::convertToDTO)
-                .collect(Collectors.toList());
+        try {
+            List<Movie> movies = movieRepository.findAll();
+            return movies.stream()
+                    .map(this::convertToDTO)
+                    .collect(Collectors.toList());
+        } catch (Exception e) {
+            throw new CustomException("Failed to get all movies: " + e.getMessage());
+        }
     }
 
     @Override
     public List<MovieDTO> getFirstTenMovies() {
-        Pageable topTen = PageRequest.of(0, 12);
-        Page<Movie> movies = movieRepository.findLastTenMoviesAdded(topTen);
-        return movies.stream()
-                .map(this::convertToDTO)
-                .collect(Collectors.toList());
+        try {
+            Pageable topTen = PageRequest.of(0, 12);
+            Page<Movie> movies = movieRepository.findLastTenMoviesAdded(topTen);
+            return movies.stream()
+                    .map(this::convertToDTO)
+                    .collect(Collectors.toList());
+        } catch (Exception e) {
+            throw new CustomException("Failed to get first ten movies: " + e.getMessage());
+        }
     }
 
     @Override
     public MovieDTO getMovieById(Long id) {
-        Movie movie = movieRepository.findById(id).orElse(null);
-        return (movie != null) ? convertToDTO(movie) : null;
+        try {
+            Movie movie = movieRepository.findById(id).orElse(null);
+            return (movie != null) ? convertToDTO(movie) : null;
+        } catch (Exception e) {
+            throw new CustomException("Failed to get movie by ID: " + e.getMessage());
+        }
     }
 
     @Override
     public MovieDTO saveMovie(RequestMovieDTO requestMovieDTO) throws ParseException {
-        Logger LOGGER = LoggerFactory.getLogger(MovieServiceImpl.class);
-        LOGGER.info("ayoub: {}", requestMovieDTO);
-        Movie movie = new Movie();
-        movie = convertToEntity(requestMovieDTO,movie);
-        movie = movieRepository.save(movie);
-        MovieDTO movieDTO = convertToDTO(movie);
-        movieDTO.setDirector(modelMapper.map(personService.getPersonById(requestMovieDTO.getDirectorId()), Person.class));
-        return movieDTO;
+        try {
+            Logger LOGGER = LoggerFactory.getLogger(MovieServiceImpl.class);
+            LOGGER.info("ayoub: {}", requestMovieDTO);
+            Movie movie = new Movie();
+            movie = convertToEntity(requestMovieDTO, movie);
+            movie = movieRepository.save(movie);
+            MovieDTO movieDTO = convertToDTO(movie);
+            movieDTO.setDirector(modelMapper.map(personService.getPersonById(requestMovieDTO.getDirectorId()), Person.class));
+            return movieDTO;
+        } catch (Exception e) {
+            throw new CustomException("Failed to save movie: " + e.getMessage());
+        }
     }
 
     @Override
     public Movie saveMovie(Movie requestMovieDTO) {
-        return movieRepository.save(requestMovieDTO);
+        try {
+            return movieRepository.save(requestMovieDTO);
+        } catch (Exception e) {
+            throw new CustomException("Failed to save movie: " + e.getMessage());
+        }
     }
 
     @Override
-    public MovieDTO updateMovie( RequestMovieDTO requestMovieDTO) throws ParseException {
-        Movie movie = movieRepository.findById(requestMovieDTO.getId()).orElseThrow(() -> new RuntimeException("Movie not found"));
-        movie = convertToEntity(requestMovieDTO, movie);
-        movie = movieRepository.save(movie);
-        return convertToDTO(movie);
+    public MovieDTO updateMovie(RequestMovieDTO requestMovieDTO) throws ParseException {
+        try {
+            Movie movie = movieRepository.findById(requestMovieDTO.getId()).orElseThrow(() -> new CustomException("Movie not found"));
+            movie = convertToEntity(requestMovieDTO, movie);
+            movie = movieRepository.save(movie);
+            return convertToDTO(movie);
+        } catch (Exception e) {
+            throw new CustomException("Failed to update movie: " + e.getMessage());
+        }
     }
 
     @Override
     public List<Movie> findAllByCastContains(Person person) {
-        return movieRepository.findAllByCastContains(person);
+        try {
+            return movieRepository.findAllByCastContains(person);
+        } catch (Exception e) {
+            throw new CustomException("Failed to find movies by cast: " + e.getMessage());
+        }
     }
 
     @Transactional
     @Override
     public void deleteMovie(Long id) {
-        Movie movie = movieRepository.findById(id).orElseThrow(() -> new RuntimeException("Movie not found"));
-       /* List<Watchlist> watchlists = watchListService.findAllByMoviesContains(movie);
-        for (Watchlist watchlist : watchlists) {
-            watchlist.getMovies().remove(movie);
-            watchListService.save(watchlist);
-        }*/
-        movieRepository.delete(movie);    }
+        try {
+            Movie movie = movieRepository.findById(id).orElseThrow(() -> new CustomException("Movie not found"));
+            movieRepository.delete(movie);
+        } catch (Exception e) {
+            throw new CustomException("Failed to delete movie: " + e.getMessage());
+        }
+    }
 
     @Override
     public List<MovieDTO> findByName(String name) {
-
-        return movieRepository.findMovieByName(name).stream()
-                .map(this::convertToDTO)
-                .collect(Collectors.toList());
+        try {
+            return movieRepository.findMovieByName(name).stream()
+                    .map(this::convertToDTO)
+                    .collect(Collectors.toList());
+        } catch (Exception e) {
+            throw new CustomException("Failed to find movies by name: " + e.getMessage());
+        }
     }
 
     @Override
     public List<MovieDTO> findByGenre(String name) {
-        return movieRepository.findMovieByGenre(name).stream()
-                .map(this::convertToDTO)
-                .collect(Collectors.toList());
+        try {
+            return movieRepository.findMovieByGenre(name).stream()
+                    .map(this::convertToDTO)
+                    .collect(Collectors.toList());
+        } catch (Exception e) {
+            throw new CustomException("Failed to find movies by genre: " + e.getMessage());
+        }
     }
 
     private MovieDTO convertToDTO(Movie movie) {
-
-        MovieDTO movieDTO = modelMapper.map(movie, MovieDTO.class);
-        movieDTO.setDirector(movie.getDirector());
-        return movieDTO;
+        try {
+            MovieDTO movieDTO = modelMapper.map(movie, MovieDTO.class);
+            movieDTO.setDirector(movie.getDirector());
+            return movieDTO;
+        } catch (Exception e) {
+            throw new CustomException("Failed to convert movie to DTO: " + e.getMessage());
+        }
     }
-    private Movie convertToEntity(RequestMovieDTO requestMovieDTO, Movie movie) throws ParseException {
 
+    private Movie convertToEntity(RequestMovieDTO requestMovieDTO, Movie movie) throws ParseException {
+        try {
             movie.setTitle(requestMovieDTO.getTitle());
             movie.setDescription(requestMovieDTO.getDescription());
             movie.setReleaseDate(requestMovieDTO.getReleaseDate());
@@ -146,11 +182,9 @@ public class MovieServiceImpl implements MovieService {
             if (requestMovieDTO.getPosterFile() != null && !requestMovieDTO.getPosterFile().isEmpty()) {
                 movie.setPosterUrl(s3Service.uploadFile("movies_images",requestMovieDTO.getPosterFile()));
             }
-
             if (requestMovieDTO.getCoverFile() != null && !requestMovieDTO.getCoverFile().isEmpty()) {
                 movie.setCoverUrl(s3Service.uploadFile("movies_images",requestMovieDTO.getCoverFile()));
             }
-
             if (requestMovieDTO.getVideoFile() != null && !requestMovieDTO.getVideoFile().isEmpty()) {
                 movie.setVideoUrl(s3Service.uploadFile("movies_videos",requestMovieDTO.getVideoFile()));
             }
@@ -169,8 +203,8 @@ public class MovieServiceImpl implements MovieService {
             });
             movie.setCast(cast);
             return movie;
+        } catch (Exception e) {
+            throw new CustomException("Failed to convert request movie DTO to entity: " + e.getMessage());
+        }
     }
-
-
 }
-

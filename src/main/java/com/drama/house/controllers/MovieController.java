@@ -4,56 +4,102 @@ import com.drama.house.dtos.MovieDTO;
 import com.drama.house.dtos.requests.RequestMovieDTO;
 import com.drama.house.services.MovieService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import jakarta.validation.Valid;
 import java.text.ParseException;
 import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/movies")
 public class MovieController {
-    private MovieService movieService;
+    private final MovieService movieService;
+
+    @Autowired
     public MovieController(MovieService movieService) {
         this.movieService = movieService;
     }
-    @GetMapping
-    public List<MovieDTO> getAllMovies() {
-        return movieService.getAllMovies();
+
+    @GetMapping("")
+    public ResponseEntity<?> getAllMovies() {
+        try {
+            List<MovieDTO> movies = movieService.getAllMovies();
+            return ResponseEntity.ok(movies);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        }
     }
 
     @GetMapping("/{id}")
-    public MovieDTO getMovieById(@PathVariable Long id) {
-        return movieService.getMovieById(id);
+    public ResponseEntity<?> getMovieById(@PathVariable Long id) {
+        try {
+            MovieDTO movie = movieService.getMovieById(id);
+            return ResponseEntity.ok(movie);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        }
     }
 
-    @PostMapping
-    public MovieDTO addMovie(@ModelAttribute RequestMovieDTO requestMovieDTO) throws ParseException {
-        System.out.println("justrequest "+requestMovieDTO);
+    @PostMapping("")
+    public ResponseEntity<?> addMovie(@Valid @ModelAttribute RequestMovieDTO requestMovieDTO) {
+        try {
+            MovieDTO movieDTO = movieService.saveMovie(requestMovieDTO);
+            return ResponseEntity.status(HttpStatus.CREATED).body(movieDTO);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        }
+    }
 
-        return movieService.saveMovie(requestMovieDTO);
+    @PutMapping("")
+    public ResponseEntity<?> updateMovie(@Valid @ModelAttribute RequestMovieDTO requestMovieDTO) {
+        try {
+            MovieDTO movieDTO = movieService.updateMovie(requestMovieDTO);
+            return ResponseEntity.ok(movieDTO);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        }
     }
-    @PutMapping
-    public MovieDTO updateMovie( @ModelAttribute RequestMovieDTO requestMovieDTO) throws ParseException {
-        return movieService.updateMovie(requestMovieDTO);
-    }
+
     @DeleteMapping("/{id}")
-    public void deleteMovie(@PathVariable Long id) {
-        movieService.deleteMovie(id);
+    public ResponseEntity<?> deleteMovie(@PathVariable Long id) {
+        try {
+            movieService.deleteMovie(id);
+            return ResponseEntity.noContent().build();
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        }
     }
 
     @GetMapping("/search")
-    public List<MovieDTO> findByName(@RequestParam String name) {
-        return movieService.findByName(name);
+    public ResponseEntity<?> findByName(@RequestParam String name) {
+        try {
+            List<MovieDTO> movies = movieService.findByName(name);
+            return ResponseEntity.ok(movies);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        }
     }
 
     @GetMapping("/search/genre")
-    public List<MovieDTO> findByGenre(@RequestParam String name) {
-        return movieService.findByGenre(name);
+    public ResponseEntity<?> findByGenre(@RequestParam String name) {
+        try {
+            List<MovieDTO> movies = movieService.findByGenre(name);
+            return ResponseEntity.ok(movies);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        }
     }
 
     @GetMapping("/last-ten")
-    public List<MovieDTO> getFirstTenMovies() {
-        return movieService.getFirstTenMovies();
+    public ResponseEntity<?> getFirstTenMovies() {
+        try {
+            List<MovieDTO> movies = movieService.getFirstTenMovies();
+            return ResponseEntity.ok(movies);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        }
     }
 }
-

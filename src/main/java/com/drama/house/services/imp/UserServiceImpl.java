@@ -8,6 +8,7 @@ import com.drama.house.dtos.auth.ResponseDto;
 import com.drama.house.entities.PermissionEntity;
 import com.drama.house.entities.RoleEntity;
 import com.drama.house.entities.User;
+import com.drama.house.exception.CustomException;
 import com.drama.house.repositories.UserRepository;
 import com.drama.house.services.RoleService;
 import com.drama.house.services.UserService;
@@ -58,8 +59,13 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDTO getUserById(Long id) {
-        User user = userRepository.findById(id).orElse(null);
-        return (user != null) ? convertToDTO(user) : null;
+        try {
+            User user = userRepository.findById(id).get();
+            return convertToDTO(user);
+        }catch (CustomException e){
+            throw new CustomException("User not found");
+        }
+
     }
 
     @Override
@@ -117,9 +123,6 @@ public class UserServiceImpl implements UserService {
     }
 
     public ResponseDto mapUserToResponseDTO(User user) {
-        Set<String> permissionNames = user.getPermissions().stream()
-                .map(PermissionEntity::getName)
-                .collect(Collectors.toSet());
 
         return new ResponseDto(
                 user.getUsername(),
@@ -141,19 +144,19 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDTO updateUser(UserDTO updatedUser) {
-        String currentUsername = SecurityContextHolder.getContext().getAuthentication().getName();
-        User currentUser = userRepository.findByEmail(currentUsername).get();
+        String currentUserEmail = getCurrentUser().getEmail();
+        User currentUser = userRepository.findByEmail(currentUserEmail).orElse(null);
 
-        if (currentUser != null) {
-            if (updatedUser.getEmail() != null && !userRepository.findByEmail(updatedUser.getEmail()).equals(currentUser)) {
-                throw new IllegalArgumentException("Email is already in use");
-            }
-            currentUser.setUsername(updatedUser.getUsername() != null ? updatedUser.getUsername() : currentUser.getUsername());
-            currentUser.setEmail(updatedUser.getEmail() != null ? updatedUser.getEmail() : currentUser.getEmail());
-            currentUser.setPassword(updatedUser.getPassword() != null ? passwordEncoder.encode(updatedUser.getPassword()) : currentUser.getPassword());
-            currentUser.setId(currentUser.getId());
-            userRepository.save(currentUser);
+        if (updatedUser.getEmail() != null && !userRepository.findByEmail(updatedUser.getEmail()).equals(currentUser)) {
+            throw new IllegalArgumentException("Email is already in use");
         }
+        assert currentUser != null;
+        currentUser.setUsername(updatedUser.getUsername() != null ? updatedUser.getUsername() : currentUser.getUsername());
+        currentUser.setEmail(updatedUser.getEmail() != null ? updatedUser.getEmail() : currentUser.getEmail());
+        currentUser.setPassword(updatedUser.getPassword() != null ? passwordEncoder.encode(updatedUser.getPassword()) : currentUser.getPassword());
+        currentUser.setId(currentUser.getId());
+        userRepository.save(currentUser);
         return convertToDTO(currentUser);
+
     }
 }
